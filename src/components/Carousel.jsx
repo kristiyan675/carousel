@@ -8,6 +8,8 @@ const Carousel = ({ images }) => {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
 
+  const totalImages = [...images, ...images]; // Duplicate images
+
   const handleMouseDown = (e) => {
     setIsDragging(true);
     setStartX(e.pageX - innerContainerRef.current.offsetLeft);
@@ -26,19 +28,6 @@ const Carousel = ({ images }) => {
   const handleMouseUp = () => {
     setIsDragging(false);
     containerRef.current.style.cursor = "grab";
-
-    // Apply bounce effect if scrolled to the end
-    if (
-      innerContainerRef.current.scrollLeft <= 0 ||
-      innerContainerRef.current.scrollLeft >=
-        innerContainerRef.current.scrollWidth -
-          innerContainerRef.current.clientWidth
-    ) {
-      innerContainerRef.current.classList.add("bounce");
-      setTimeout(() => {
-        innerContainerRef.current.classList.remove("bounce");
-      }, 500); // duration of the bounce animation
-    }
   };
 
   const handleMouseLeave = () => {
@@ -61,6 +50,30 @@ const Carousel = ({ images }) => {
     };
   }, []);
 
+  useEffect(() => {
+    const adjustScrollPosition = () => {
+      const { scrollLeft, scrollWidth, clientWidth } =
+        innerContainerRef.current;
+
+      if (scrollLeft === 0) {
+        innerContainerRef.current.scrollLeft = scrollWidth / 2 - clientWidth;
+      } else if (scrollLeft >= scrollWidth / 2) {
+        innerContainerRef.current.scrollLeft = scrollLeft - scrollWidth / 2;
+      }
+    };
+
+    innerContainerRef.current.addEventListener("scroll", adjustScrollPosition);
+    innerContainerRef.current.scrollLeft =
+      innerContainerRef.current.scrollWidth / 2;
+
+    return () => {
+      innerContainerRef.current.removeEventListener(
+        "scroll",
+        adjustScrollPosition
+      );
+    };
+  }, []);
+
   return (
     <div
       className="container"
@@ -70,7 +83,7 @@ const Carousel = ({ images }) => {
       onMouseLeave={handleMouseLeave}
     >
       <div className="inner-container" ref={innerContainerRef}>
-        {images.map((image, index) => (
+        {totalImages.map((image, index) => (
           <div
             className="item"
             key={index}
