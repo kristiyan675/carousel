@@ -54,7 +54,6 @@ const Carousel = ({ images }) => {
       const { scrollLeft, scrollWidth, clientWidth } =
         innerContainerRef.current;
       const maxScrollLeft = scrollWidth / 2;
-
       if (scrollLeft < clientWidth / 2) {
         innerContainerRef.current.scrollLeft += maxScrollLeft;
       } else if (scrollLeft >= maxScrollLeft + clientWidth / 2) {
@@ -62,18 +61,23 @@ const Carousel = ({ images }) => {
       }
     };
 
-    innerContainerRef.current.addEventListener("scroll", scrollHandler);
+    if (innerContainerRef.current) {
+      innerContainerRef.current.addEventListener("scroll", scrollHandler);
 
-    // Set initial scroll position to the middle
-    innerContainerRef.current.scrollLeft =
-      innerContainerRef.current.scrollWidth / 4;
-    console.log("here");
-    return () => {
-      innerContainerRef.current.removeEventListener("scroll", scrollHandler);
-    };
-  }, []);
-  console.log(startX, " start");
-  console.log(scrollLeft, " scroll");
+      // Ensure initial scroll position is set correctly
+      requestAnimationFrame(() => {
+        innerContainerRef.current.scrollLeft =
+          innerContainerRef.current.scrollWidth / 4;
+        console.log(innerContainerRef.current.scrollLeft, " 1");
+      });
+
+      return () => {
+        innerContainerRef.current.removeEventListener("scroll", scrollHandler);
+      };
+    }
+  }, [innerContainerRef.current]);
+
+  console.log(innerContainerRef.current?.scrollLeft, " 2");
   return (
     <div
       className="container"
