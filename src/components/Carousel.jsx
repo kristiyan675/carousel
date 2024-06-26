@@ -7,8 +7,7 @@ const Carousel = ({ images }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-
-  const totalImages = [...images, ...images]; // Duplicate images
+  const duplicatedImages = [...images, ...images];
 
   const handleMouseDown = (e) => {
     setIsDragging(true);
@@ -51,29 +50,30 @@ const Carousel = ({ images }) => {
   }, []);
 
   useEffect(() => {
-    const adjustScrollPosition = () => {
+    const scrollHandler = () => {
       const { scrollLeft, scrollWidth, clientWidth } =
         innerContainerRef.current;
+      const maxScrollLeft = scrollWidth / 2;
 
-      if (scrollLeft === 0) {
-        innerContainerRef.current.scrollLeft = scrollWidth / 2 - clientWidth;
-      } else if (scrollLeft >= scrollWidth / 2) {
-        innerContainerRef.current.scrollLeft = scrollLeft - scrollWidth / 2;
+      if (scrollLeft < clientWidth / 2) {
+        innerContainerRef.current.scrollLeft += maxScrollLeft;
+      } else if (scrollLeft >= maxScrollLeft + clientWidth / 2) {
+        innerContainerRef.current.scrollLeft -= maxScrollLeft;
       }
     };
 
-    innerContainerRef.current.addEventListener("scroll", adjustScrollPosition);
-    innerContainerRef.current.scrollLeft =
-      innerContainerRef.current.scrollWidth / 2;
+    innerContainerRef.current.addEventListener("scroll", scrollHandler);
 
+    // Set initial scroll position to the middle
+    innerContainerRef.current.scrollLeft =
+      innerContainerRef.current.scrollWidth / 4;
+    console.log("here");
     return () => {
-      innerContainerRef.current.removeEventListener(
-        "scroll",
-        adjustScrollPosition
-      );
+      innerContainerRef.current.removeEventListener("scroll", scrollHandler);
     };
   }, []);
-
+  console.log(startX, " start");
+  console.log(scrollLeft, " scroll");
   return (
     <div
       className="container"
@@ -83,7 +83,7 @@ const Carousel = ({ images }) => {
       onMouseLeave={handleMouseLeave}
     >
       <div className="inner-container" ref={innerContainerRef}>
-        {totalImages.map((image, index) => (
+        {duplicatedImages.map((image, index) => (
           <div
             className="item"
             key={index}
