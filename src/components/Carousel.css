@@ -4,18 +4,18 @@
   position: relative;
   overflow: hidden;
   cursor: grab;
-  user-select: none; /* Prevent text selection during drag */
+  user-select: none;
 }
 
 .inner-container {
   display: flex;
   gap: 20px;
-  height: 100%; /* Make sure the height is 100% */
-  overflow-x: auto; /* Enable horizontal scrolling */
+  height: 100%;
+  overflow-x: auto;
 }
 
 .item {
-  height: 100%; /* Adjust height to 100% of the container */
+  height: 100%;
   width: 400px;
   border-radius: 5px;
   background-size: cover;

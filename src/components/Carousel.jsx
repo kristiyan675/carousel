@@ -77,7 +77,6 @@ const Carousel = ({ images }) => {
     }
   }, [innerContainerRef.current]);
 
-  console.log(innerContainerRef.current?.scrollLeft, " 2");
   return (
     <div
       className="container"
