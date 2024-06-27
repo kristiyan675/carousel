@@ -39,7 +39,12 @@ const Carousel = () => {
     }
   };
 
+  const handleLoadLol = () => {
+    console.log("loaded");
+  };
   useEffect(() => {
+    window.addEventListener("load", handleLoadLol);
+
     const fetchImages = async () => {
       const res = await fetch("https://picsum.photos/v2/list?page=1&limit=10");
       const data = await res.json();
@@ -68,15 +73,7 @@ const Carousel = () => {
     };
 
     fetchImages();
-  }, []);
 
-  useLayoutEffect(() => {
-    if (!loading && innerContainerRef.current) {
-      requestAnimationFrame(() => {
-        innerContainerRef.current.scrollLeft =
-          innerContainerRef.current.scrollWidth / 4;
-      });
-    }
     const scrollHandler = () => {
       const { scrollLeft, scrollWidth, clientWidth } =
         innerContainerRef.current;
@@ -94,6 +91,19 @@ const Carousel = () => {
       return () => {
         innerContainerRef.current.removeEventListener("scroll", scrollHandler);
       };
+    }
+
+    return () => {
+      window.removeEventListener("load", handleLoadLol);
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!loading && innerContainerRef.current) {
+      requestAnimationFrame(() => {
+        innerContainerRef.current.scrollLeft =
+          innerContainerRef.current.scrollWidth / 4;
+      });
     }
   }, [loading]);
 
