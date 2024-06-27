@@ -39,40 +39,6 @@ const Carousel = () => {
     }
   };
 
-  useEffect(() => {
-    const handleMouseUpGlobal = () => {
-      setIsDragging(false);
-      if (containerRef.current) {
-        containerRef.current.style.cursor = "grab";
-      }
-    };
-    window.addEventListener("mouseup", handleMouseUpGlobal);
-    return () => {
-      window.removeEventListener("mouseup", handleMouseUpGlobal);
-    };
-  }, []);
-
-  useEffect(() => {
-    const scrollHandler = () => {
-      const { scrollLeft, scrollWidth, clientWidth } =
-        innerContainerRef.current;
-      const maxScrollLeft = scrollWidth / 2;
-      if (scrollLeft < clientWidth / 2) {
-        innerContainerRef.current.scrollLeft += maxScrollLeft;
-      } else if (scrollLeft >= maxScrollLeft + clientWidth / 2) {
-        innerContainerRef.current.scrollLeft -= maxScrollLeft;
-      }
-    };
-
-    if (innerContainerRef.current) {
-      innerContainerRef.current.addEventListener("scroll", scrollHandler);
-
-      return () => {
-        innerContainerRef.current.removeEventListener("scroll", scrollHandler);
-      };
-    }
-  }, [innerContainerRef.current]);
-
   useLayoutEffect(() => {
     const fetchImages = async () => {
       const res = await fetch("https://picsum.photos/v2/list?page=1&limit=10");
@@ -113,6 +79,24 @@ const Carousel = () => {
         innerContainerRef.current.scrollLeft =
           innerContainerRef.current.scrollWidth / 4;
       });
+    }
+    const scrollHandler = () => {
+      const { scrollLeft, scrollWidth, clientWidth } =
+        innerContainerRef.current;
+      const maxScrollLeft = scrollWidth / 2;
+      if (scrollLeft < clientWidth / 2) {
+        innerContainerRef.current.scrollLeft += maxScrollLeft;
+      } else if (scrollLeft >= maxScrollLeft + clientWidth / 2) {
+        innerContainerRef.current.scrollLeft -= maxScrollLeft;
+      }
+    };
+
+    if (innerContainerRef.current) {
+      innerContainerRef.current.addEventListener("scroll", scrollHandler);
+
+      return () => {
+        innerContainerRef.current.removeEventListener("scroll", scrollHandler);
+      };
     }
   }, [loading, innerContainerRef.current]);
 
