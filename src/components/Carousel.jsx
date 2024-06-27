@@ -39,7 +39,7 @@ const Carousel = () => {
     }
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const fetchImages = async () => {
       const res = await fetch("https://picsum.photos/v2/list?page=1&limit=10");
       const data = await res.json();
@@ -60,8 +60,6 @@ const Carousel = () => {
       Promise.all(promises)
         .then((loadedImages) => {
           setImages(loadedImages);
-        })
-        .then(() => {
           setLoading(false);
         })
         .catch((error) => {
@@ -74,7 +72,6 @@ const Carousel = () => {
 
   useLayoutEffect(() => {
     if (!loading && innerContainerRef.current) {
-      // Ensure the initial scroll position is correctly set once the images are loaded
       requestAnimationFrame(() => {
         innerContainerRef.current.scrollLeft =
           innerContainerRef.current.scrollWidth / 4;
@@ -98,7 +95,7 @@ const Carousel = () => {
         innerContainerRef.current.removeEventListener("scroll", scrollHandler);
       };
     }
-  }, [loading, innerContainerRef.current]);
+  }, [loading]);
 
   return (
     <div
