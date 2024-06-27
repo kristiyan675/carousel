@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useLayoutEffect } from "react";
 import Skeleton from "./Skeleton";
 import "./Carousel.css";
 
@@ -73,31 +73,38 @@ const Carousel = () => {
     }
   }, [innerContainerRef.current]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fetchImages = async () => {
       const res = await fetch("https://picsum.photos/v2/list?page=1&limit=10");
       const data = await res.json();
       const imageUrls = data.map((img) => img.download_url);
+      preloadImages(imageUrls);
+    };
 
-      // Load images
-      const loadImages = imageUrls.map((url) => {
-        return new Promise((resolve) => {
+    const preloadImages = (imageUrls) => {
+      const promises = imageUrls.map((url) => {
+        return new Promise((resolve, reject) => {
           const img = new Image();
           img.src = url;
-          img.onload = resolve;
-          img.onerror = resolve; // Resolve on error to prevent hanging
+          img.onload = () => resolve(url);
+          img.onerror = reject;
         });
       });
 
-      await Promise.all(loadImages);
-      setImages(imageUrls);
-      setLoading(false);
+      Promise.all(promises)
+        .then((loadedImages) => {
+          setImages(loadedImages);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Failed to load images", error);
+        });
     };
 
     fetchImages();
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!loading && innerContainerRef.current) {
       // Ensure the initial scroll position is correctly set once the images are loaded
       requestAnimationFrame(() => {
@@ -122,11 +129,17 @@ const Carousel = () => {
             ))
           : duplicatedImages.map((image, index) => (
               <div
-                className="item"
+                className="item-wrapper"
                 key={index}
-                style={{ backgroundImage: `url(${image})` }}
                 onMouseDown={handleMouseDown}
-              ></div>
+              >
+                <img
+                  className="item"
+                  src={image}
+                  alt={`carousel-item-${index}`}
+                  draggable="false"
+                />
+              </div>
             ))}
       </div>
     </div>
