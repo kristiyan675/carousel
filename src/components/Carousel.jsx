@@ -94,6 +94,8 @@ const Carousel = () => {
       Promise.all(promises)
         .then((loadedImages) => {
           setImages(loadedImages);
+        })
+        .then(() => {
           setLoading(false);
         })
         .catch((error) => {
