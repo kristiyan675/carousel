@@ -18,7 +18,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <h1>Infinite Image Carousel</h1>
+      <h1>Our players’ favorite games</h1>
       <ImageCarousel images={images} />
     </div>
   );
