@@ -3,7 +3,8 @@
   height: 200px;
   cursor: grab;
   user-select: none;
-  overflow: hidden;
+  overflow: hidden; /* Ensures container hides any overflowing content */
+  position: relative; /* Needed for positioning dots container */
 }
 
 .inner-container {
@@ -31,4 +32,16 @@
   object-fit: contain; /* Ensures images fit within the container without cropping */
   background-size: cover;
   background-position: center;
+}
+
+@media (max-width: 768px) {
+  .container {
+    height: 150px; /* Adjust height for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    height: 100px; /* Further adjust height for very small screens */
+  }
 }
