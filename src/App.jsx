@@ -1,25 +1,17 @@
-// src/App.js
-import React, { useEffect, useState } from "react";
-import ImageCarousel from "./components/Carousel";
+import Carousel from "./components/Carousel/Carousel";
+import Skeleton from "./components/Skeleton/Skeleton";
 
 const App = () => {
-  const [images, setImages] = useState([]);
-
-  useEffect(() => {
-    // Fetch images from Picsum
-    const fetchImages = async () => {
-      const res = await fetch("https://picsum.photos/v2/list?page=1&limit=10");
-      const data = await res.json();
-      setImages(data.map((img) => img.download_url));
-    };
-
-    fetchImages();
-  }, []);
-
   return (
     <div className="App">
       <h1>Our players’ favorite games</h1>
-      <ImageCarousel images={images} />
+      <Carousel
+        fetchUrl="https://picsum.photos/v2/list?page=1&limit=20"
+        imageCount={15}
+        LoadingComponent={Skeleton}
+        containerClassName="custom-container"
+        itemClassName="custom-item"
+      />
     </div>
   );
 };

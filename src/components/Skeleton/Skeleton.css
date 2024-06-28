@@ -1,0 +1,19 @@
+.skeleton {
+  height: 100%;
+  width: 250px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #ffd700 25%, #fffacd 50%, #ffd700 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  flex-shrink: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
