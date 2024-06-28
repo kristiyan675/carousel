@@ -3,6 +3,7 @@
   height: 200px;
   cursor: grab;
   user-select: none;
+  overflow: hidden;
 }
 
 .inner-container {
@@ -10,19 +11,24 @@
   gap: 20px;
   height: 100%;
   overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+}
+
+.inner-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
 }
 
 .item-wrapper {
   height: 100%;
-  width: 400px;
+  flex: 0 0 auto; /* Allows items to take their natural width */
   border-radius: 5px;
-  flex-shrink: 0;
 }
 
 .item {
   height: 100%;
-  width: 100%;
+  width: auto; /* Maintains aspect ratio */
   border-radius: 5px;
+  object-fit: contain; /* Ensures images fit within the container without cropping */
   background-size: cover;
   background-position: center;
 }

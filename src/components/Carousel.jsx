@@ -39,12 +39,7 @@ const Carousel = () => {
     }
   };
 
-  const handleLoadLol = () => {
-    console.log("loaded");
-  };
   useEffect(() => {
-    window.addEventListener("load", handleLoadLol);
-
     const fetchImages = async () => {
       const res = await fetch("https://picsum.photos/v2/list?page=1&limit=10");
       const data = await res.json();
@@ -92,10 +87,6 @@ const Carousel = () => {
         innerContainerRef.current.removeEventListener("scroll", scrollHandler);
       };
     }
-
-    return () => {
-      window.removeEventListener("load", handleLoadLol);
-    };
   }, []);
 
   useLayoutEffect(() => {
