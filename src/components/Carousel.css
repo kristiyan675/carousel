@@ -3,8 +3,7 @@
   height: 200px;
   cursor: grab;
   user-select: none;
-  overflow: hidden; /* Ensures container hides any overflowing content */
-  position: relative; /* Needed for positioning dots container */
+  overflow: hidden;
 }
 
 .inner-container {
@@ -12,36 +11,36 @@
   gap: 20px;
   height: 100%;
   overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
 }
 
 .inner-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
+  display: none;
 }
 
 .item-wrapper {
   height: 100%;
-  flex: 0 0 auto; /* Allows items to take their natural width */
+  flex: 0 0 auto;
   border-radius: 5px;
 }
 
 .item {
   height: 100%;
-  width: auto; /* Maintains aspect ratio */
+  width: auto;
   border-radius: 5px;
-  object-fit: contain; /* Ensures images fit within the container without cropping */
+  object-fit: contain;
   background-size: cover;
   background-position: center;
 }
 
 @media (max-width: 768px) {
   .container {
-    height: 150px; /* Adjust height for smaller screens */
+    height: 150px;
   }
 }
 
 @media (max-width: 480px) {
   .container {
-    height: 100px; /* Further adjust height for very small screens */
+    height: 100px;
   }
 }
